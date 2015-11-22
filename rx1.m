@@ -47,6 +47,6 @@ end
 % set the new value for the feedback here
 % You probably want to do somehting more intelligent
 
-feedback1 = feedback1 + 1;
+feedback1 = 6;
 
 end
