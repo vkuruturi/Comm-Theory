@@ -1,4 +1,4 @@
-function [tx, bits, gain] = tx2()
+function [tx, bits, gain] = txBridgeKat()
 % Example Transmitter. Outputs modulated data tx, and original data stream
 % data for checking error rate at receiver.
 % Your team will be assigned a number, rename your function txNUM.m
@@ -27,7 +27,7 @@ M = 16;   % THIS IS THE M-ARY # for the FSK MOD.  You have 16 channels available
 % initialize, will be set by rx after 1st transmission
 if isempty(alpacas)
     alpacas = 0;
-    tonecoeff = ;              %use channel 5 at the start
+    tonecoeff = 10;              %use channel 5 at the start
 else
     tonecoeff = prev_tone;      %use the same tone as the last transmission
 end
@@ -41,9 +41,9 @@ BCH_n = 1023;                   %codeword length for BCH encoding
 feedback_b = de2bi(alpacas, 8);
 
 % hashtable containing what QAM and message lengths should be used at each SNR
-QAM_BCH_values = {[4 1003],[8 758],[8 903],[8 973],[16 848],[16 943],[16 993], [16 1013],...
-     [32 933], [32 993], [32, 1013], [64 913], [64 983], [64 1013], [128 913], [128 983],...
-     [128 1003], [128 1013], [128 1013], [128 1013], [128 1013]};
+QAM_BCH_values = {[4 1003],[8 758],[8 903],[8 953],[16 848],[16 893],[16 943], [16 973],...
+     [32 883],[32 903],[32 903], [32 933], [32, 943], [64 903], [64 933], [64 943], ...
+     [64 973],[64 993],[64 1013],[64 1013], [64 1013]};
 SNR_values = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
 bitrate_select = containers.Map(SNR_values, QAM_BCH_values);
 

@@ -1,10 +1,12 @@
 clear all; clear global; clc; close all
-dbstop if error
+dbstop if warning
 %noiseLevel  =  randi([0 20]);
 
 % Sampling freq for specgram
-Fs = 120e4;
-for noiseLevel = 0:20
+    Fs = 120e4;
+
+for noiseLevel = 10:15
+    clearvars -global;
 sumForSpec = [];
 total1 = 0;
 total2 = 0;
@@ -31,8 +33,8 @@ end
 
 noiseLevel
 [total1, total2]
-figure(noiseLevel +1);
-spectrogram(sumForSpec,64,[],[],Fs,'yaxis')
+%figure(noiseLevel +1);
+%spectrogram(sumForSpec,64,[],[],Fs,'yaxis')
 end
 
 
