@@ -8,7 +8,7 @@ function [tx, bits, gain] = txBridgeKat()
 % you may use the following uint8 for whatever feedback purposes you want
 global prev_tone;
 global transmit;            %flag to test whether we can transmit or not
-global alpacas;             %b0-b4 are SNR, b5 is a flag for whether we can switch or not
+global alpacas;             %b0-b4 are SNR, b5 is a flag for whether we switch channels or not
                             %b6 is a flag for if the receiver encountered
                             %errors
 uint8(alpacas);
@@ -27,7 +27,8 @@ M = 16;   % THIS IS THE M-ARY # for the FSK MOD.  You have 16 channels available
 % initialize, will be set by rx after 1st transmission
 if isempty(alpacas)
     alpacas = 0;
-    tonecoeff = 10;              %use channel 5 at the start
+    tonecoeff = 5;              %use channel 5 at the start
+    transmit = 1;
 else
     tonecoeff = prev_tone;      %use the same tone as the last transmission
 end
@@ -39,6 +40,12 @@ end
 % SELECT QAM BASED ON SNR
 BCH_n = 1023;                   %codeword length for BCH encoding 
 feedback_b = de2bi(alpacas, 8);
+
+if feedback_b(6) == 1;
+    tonecoeff = randi(15);
+    transmit = 0;
+end
+
 
 % hashtable containing what QAM and message lengths should be used at each SNR
 QAM_BCH_values = {[4 1003],[8 758],[8 903],[8 953],[16 848],[16 893],[16 943], [16 973],...
@@ -89,10 +96,16 @@ msgUp = rectpulse(msg,nsamp);
 % multiply upsample message by carrier  to get transmitted signal
 tx = msgUp.*carrier;
 
-
-% scale the output
 gain = std(tx);
+if(transmit ==0) % if i'm not allowed to transmit, just set bits to all 0
+  tx = zeros(size(tx));
+  size(tx)
+  gain = 1;
+  transmit = 1;
+end
+% scale the output
 tx = tx./gain;
 alpacas = tonecoeff;
 prev_tone = tonecoeff;
+
 end

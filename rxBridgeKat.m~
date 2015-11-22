@@ -16,6 +16,7 @@ numCorrect = 0; % initialize the # of correct Rx bits
 % Global variable for feedback
 global alpacas;
 global last_snr
+global prev_try     %state val to keep track of last attempt's success
 
 
 uint8(alpacas);
@@ -30,7 +31,7 @@ rx = sig.*conj(carrier).*gain;
 rx = intdump(rx,nsamp);
 %% Recover your signal here
 BCH_n = 1023;
-QAM_BCH_values = {[4 1003],[8 758],[8 903],[8 93],[16 848],[16 893],[16 943], [16 973],...
+QAM_BCH_values = {[4 1003],[8 758],[8 903],[8 953],[16 848],[16 893],[16 943], [16 973],...
      [32 883],[32 903],[32 903], [32 933], [32, 943], [64 903], [64 933], [64 943], ...
      [64 973],[64 993],[64 1013],[64 1013], [64 1013]};
 SNR_values = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
@@ -76,11 +77,19 @@ if SNR_val >= 20
     SNR_val = 20;
 end
 last_snr = [last_snr SNR_val];
-SNR_val = mode(last_snr);
+SNR_tx = mode(last_snr);
 
-SNR_val;
+% check if you should switch to a new frequency
+switch_chan = 0;
+if success == 0
+    if prev_try = 1
+        switch_chan = 1;
+        
+    else
+        
+    
 
-alpacas = (SNR_val + (success)*2^6);
+alpacas = (SNR_tx + (success)*2^6);
 
 % set the new value for the feedback here
 % You probably want to do somehting more intelligent

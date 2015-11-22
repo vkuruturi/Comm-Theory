@@ -44,7 +44,7 @@ bits = randi([0 1],1024*k,1); % Generate random bits, pass these out of function
 %bits = ones(1024*k,1);
 syms = bi2de(reshape(bits,k,length(bits)/k).','left-msb')';
 % Random 4-QAM Signal
-msg = qammod(syms,msgM);
+msg = qammod(syms,4);
 msglength = length(msg);
 
 if(msglength ~= 1024)

@@ -50,6 +50,6 @@ end
 % set the new value for the feedback here
 % You probably want to do somehting more intelligent
 
-feedback2 = randi(15);
+feedback2 = 10;
 %feedback2 = 1; %feedback2+1;
 end
